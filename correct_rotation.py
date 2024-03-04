@@ -68,7 +68,8 @@ if __name__ == '__main__':
     parser.add_argument('model', help='Path to model')
     parser.add_argument('input_path', help='Path to image or directory')
     parser.add_argument('-o', '--output_path', help='Output directory')
-    parser.add_argument('-b', '--batch_size', help='Batch size for running the network')
+    parser.add_argument('-b', '--batch_size', type=int, default=64, 
+                        help='Batch size for running the network')
     parser.add_argument('-c', '--crop', dest='crop', default=False, action='store_true',
                         help='Crop out black borders after rotating')
     args = parser.parse_args()
