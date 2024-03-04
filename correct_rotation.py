@@ -29,18 +29,20 @@ def process_images(model, input_path, output_path,
         if os.path.splitext(output_path)[1].lower() in extensions:
             print('Output must be a directory!')
 
+    num_steps = len(image_paths) // batch_size + 1
+
     predictions = model.predict_generator(
         RotNetDataGenerator(
             image_paths,
             input_shape=(224, 224, 3),
-            batch_size=64,
+            batch_size=batch_size,
             one_hot=True,
             preprocess_func=preprocess_input,
             rotate=False,
             crop_largest_rect=True,
             crop_center=True
         ),
-        val_samples=len(image_paths)
+        steps=num_steps
     )
 
     predicted_angles = np.argmax(predictions, axis=1)
@@ -60,7 +62,6 @@ def process_images(model, input_path, output_path,
         if not output_is_image:
             output_filename = os.path.join(output_path, os.path.basename(path))
         cv2.imwrite(output_filename, rotated_image)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
